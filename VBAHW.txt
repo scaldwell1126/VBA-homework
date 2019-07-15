@@ -1,0 +1,77 @@
+Sub Get_Unique()
+'Set variable for ticker
+Dim ticker As String
+'
+Dim volume As Double
+volume = 0
+
+
+Dim Summary_Table_Row As Integer
+ Summary_Table_Row = 2
+
+ LastRow = Cells(Rows.Count, 1).End(xlUp).Row
+
+'Calculate Yearly Change
+Range("J2").Formula = Range("F2") - Range("C2")
+Application.ScreenUpdating = False
+Range("J2:J" & LastRow).Formula = "=F2-C2"
+
+'Conditional Formating
+Dim My_Range As Range
+Set My_Range = Range("J2:J" & LastRow)
+
+For Each Cell In My_Range
+
+If Cell.Value >= 0 Then
+    Cell.Interior.ColorIndex = 4
+Else
+    Cell.Interior.ColorIndex = 3
+
+End If
+
+
+Next
+
+
+'Calculate Percent Change
+
+
+'Loop through all tickers
+For i = 2 To LastRow
+
+' Check if we are still within the same ticker, if it is not...
+If Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
+' Set the Brand name
+     ticker = Cells(i, 1).Value
+
+ ' Set the ticker
+      ticker = Cells(i, 1).Value
+
+ ' Add to the volume
+      volume = volume + Cells(i, 7).Value
+
+'Print the ticker in the Summary Table
+    Range("I" & Summary_Table_Row).Value = ticker
+
+ ' Print the volume Amount to the Summary Table
+      Range("L" & Summary_Table_Row).Value = volume
+
+ ' Add one to the summary table row
+      Summary_Table_Row = Summary_Table_Row + 1
+
+  ' Reset the volume
+      volume = 0
+
+  ' If the cell immediately following a row is the same brand...
+    Else
+
+ ' Add to the Brand Total
+      volume = volume + Cells(i, 7).Value
+
+
+End If
+
+Next i
+
+End Sub
+
